@@ -5,6 +5,7 @@
 #define LED_DATA_PIN 10
 CRGB leds[81];
 
+// each board and the indexs of the led's it uses
 Grid boards[3][3] {
   {
     Grid(0, 1, 2, 27, 28, 29, 54, 55, 56),
@@ -21,6 +22,7 @@ Grid boards[3][3] {
   },
 };
 
+// pin numbers for each board buttons
 uint8_t buttonPins[3][3] {
   { 1, 2, 3 }, { 4, 5, 6 },
   { 7, 8, 9 }
@@ -52,14 +54,14 @@ void loop() {
       boards[x][y].setRandPos(curPlayer);
 
   // render and check for input
-  for (uint8_t i = 0; i < 3; i++) {
+  for (uint8_t i = 0; i < 6; i++) {
     // set colors
     for (uint8_t x = 0; x < 3; x++)
       for (uint8_t y = 0; y < 3; y++)
-        boards[x][y].bindToLeds(i % 2);
+        boards[x][y].bindToLeds(i % 2); // note: suggestion is flashing
     FastLED.show();
 
-    // check for input
+    // check for input every 5ms for 0.5seconds then
     bool inputRecieved = false;
     for (uint8_t g = 0; g < 100 && !inputRecieved; g++) {
       
@@ -71,13 +73,17 @@ void loop() {
           }
           
       delay(5);
-    }    
+    }
+
+    // if they selected a tile then we don't 
+    // need to wait anymore
     if (inputRecieved)
       goto next_player;
 
     
   }
 
+  // switch players
 next_player:
   if (curPlayer == RED)
     curPlayer = BLUE;
