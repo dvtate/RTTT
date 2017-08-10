@@ -46,7 +46,7 @@ void setup() {
 
 void loop() {
 
-  static struct possession_t curPlayer = RED;
+  static possession_t curPlayer = RED;
 
   // suggest a random square for each grid
   for (uint8_t x = 0; x < 3; x++)
